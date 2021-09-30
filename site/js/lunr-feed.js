@@ -6,6 +6,8 @@ const index = lunr(function () {
   this.field('url')
   this.field('record_type')
   this.field('creator')
+  this.field('singlepart_notes')
+  this.field('multipart_notes')
   this.field('subjects')
   this.ref('href')
 })

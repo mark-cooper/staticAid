@@ -11,6 +11,8 @@ layout: none
       "title": "{{collection.title | escape | strip_newlines}}",
       "url": "{{site.url}}/collections/{{id}}",
       "record_type": "collection",
+      "singlepart_notes": "{{collection.notes | where: 'publish', true | map: 'content' | compact | join: ' '}}",
+      "multipart_notes": "{{collection.notes | where: 'publish', true | map: 'subnotes' | compact | where: 'publish', true | map: 'content' | compact | join: ' '}}",
       "subjects": [
         {% assign subjects = collection.subjects %}
         {% for subject in subjects %}
@@ -30,6 +32,8 @@ layout: none
       "title": "{{object.title | escape | strip_newlines}}",
       "url": "{{site.url}}/objects/{{id}}",
       "record_type": "{{object.level}}",
+      "singlepart_notes": "{{object.notes | where: 'publish', true | map: 'content' | compact | join: ' '}}",
+      "multipart_notes": "{{object.notes | where: 'publish', true | map: 'subnotes' | compact | where: 'publish', true | map: 'content' | compact | join: ' '}}",
       "subjects": [
         {% assign subjects = object.subjects %}
         {% for subject in subjects %}
