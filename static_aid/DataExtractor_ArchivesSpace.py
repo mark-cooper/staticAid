@@ -78,7 +78,7 @@ class DataExtractor_ArchivesSpace(DataExtractor):
                 ('software', 'software')]:
             for agent in getattr(self.aspace.agents, agent_type)(with_params={'all_ids': True, 'modified_since': last_export}):
                 agent_id = agent.uri.split("/")[-1]
-                if agent.publish:
+                if hasattr(agent, 'publish') and agent.publish:
                     self.save_data_file(agent_id, agent.json(), config.destinations[destination_sfx])
                 else:
                     self.remove_data_file(agent_id, config.destinations[destination_sfx])
@@ -88,7 +88,7 @@ class DataExtractor_ArchivesSpace(DataExtractor):
         self.log_fetch_start("subjects", last_export)
         for subject in self.aspace.subjects(with_params={'all_ids': True, 'modified_since': last_export}):
             subject_id = subject.uri.split("/")[-1]
-            if subject.publish:
+            if subject.is_linked_to_published_record:
                 self.save_data_file(subject_id, subject.json(), config.destinations['subjects'])
             else:
                 self.remove_data_file(subject_id, config.destinations['subjects'])
