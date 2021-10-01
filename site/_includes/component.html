@@ -2,6 +2,7 @@
   <h3>Contents List</h3>
 {% endif %}
 {% for component in tree %}
+  {% unless component.publish %}{% continue %}{% endunless %}
   {% capture component_id %}{{component.id}}{% endcapture %}
   {% assign component_detail = site.data.objects[component_id] %}
 
