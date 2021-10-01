@@ -4,6 +4,7 @@
 const index = lunr(function () {
   this.field('identifier')
   this.field('title')
+  this.field('display_string')
   this.field('url')
   this.field('record_type')
   this.field('creator')
@@ -32,7 +33,7 @@ $(document).ready(function () {
     result.forEach(function (result) {
       searchData.then(function (data) {
         const item = data[result.ref]
-        resultsText.append(`<p><a href="${item.url}">${item.title}</a></p>`)
+        resultsText.append(`<p><a href="${item.url}">${item.display_string}</a></p>`)
       })
     })
     results.show()

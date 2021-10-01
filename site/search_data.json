@@ -9,8 +9,9 @@ layout: none
     "collections/{{id}}": {
       "href": "collections/{{id}}",
       {% capture fa_number %}{{ collection.id_0 }}{% if collection.id_1 %}.{{ collection.id_1 }}{% endif %}{% if collection.id_2 %}.{{ collection.id_2 }}{% endif %}{% if collection.id_3 %}.{{ collection.id_3 }}{% endif %}{% endcapture %}
-      "identifier": "{{fa_number}}",
+      "identifier": "{{collection.ead_id | default: fa_number}}",
       "title": "{{collection.title | escape | strip_newlines}}",
+      "display_string": "{{collection.finding_aid_title | default: collection.title | json_value | escape | strip_newlines}}",
       "url": "{{site.url}}/collections/{{id}}",
       "record_type": "collection",
       "singlepart_notes": "{{collection.notes | where: 'publish', true | map: 'content' | compact | join: ' ' | json_value}}",
@@ -33,6 +34,7 @@ layout: none
       "href": "objects/{{id}}",
       "identifier": "{{object.ref_id}}",
       "title": "{{object.title | escape | strip_newlines}}",
+      "display_string": "{{object.display_string | json_value}}",
       "url": "{{site.url}}/objects/{{id}}",
       "record_type": "{{object.level}}",
       "singlepart_notes": "{{object.notes | where: 'publish', true | map: 'content' | compact | join: ' ' | json_value}}",

@@ -8,6 +8,7 @@ module Jekyll
            .to_json
            .delete_prefix('"')
            .delete_suffix('"')
+           .gsub(%r{</?[^>]*>}, '')
     end
   end
 end

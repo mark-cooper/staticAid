@@ -15,7 +15,7 @@ layout: default
           <div class="card full-height hover-border">
             <div class="card-header">
               <h2 class="card-title">
-                <a class="stretched-link" href="{{ site.url }}{{ site.baseurl }}/collections/{{id}}">{{ collection.title }} ({{fa_number}})</a>
+                <a class="stretched-link" href="{{ site.url }}{{ site.baseurl }}/collections/{{id}}">{{ collection.title }} ({{collection.ead_id | default: fa_number}})</a>
               </h2>
             </div>
             <div class="card-body">
