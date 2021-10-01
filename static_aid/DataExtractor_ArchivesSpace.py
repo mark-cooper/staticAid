@@ -1,6 +1,7 @@
 import logging
 from os.path import join
 
+from datetime import datetime
 from asnake.aspace import ASpace
 from static_aid import config
 from static_aid.DataExtractor import DataExtractor
@@ -72,13 +73,15 @@ class DataExtractor_ArchivesSpace(DataExtractor):
         """Fetch and save updated agent data."""
         self.log_fetch_start("agents", last_export)
         for agent_type, destination_sfx in [
-                ('corporate_entities', 'organizations'),
-                ('families', 'families'),
-                ('people',  'people'),
-                ('software', 'software')]:
-            for agent in getattr(self.aspace.agents, agent_type)(with_params={'all_ids': True, 'modified_since': last_export}):
+                ('agent_corporate_entity', 'organizations'),
+                ('agent_family', 'families'),
+                ('agent_person', 'people'),
+                ('agent_software', 'software')]:
+            query = self.search_query(agent_type, last_export, config.archivesSpace['repository'])
+            logging.info('Query: {}'.format(query))
+            for agent in self.repo.search.with_params(q=query):
                 agent_id = agent.uri.split("/")[-1]
-                if hasattr(agent, 'publish') and agent.publish:
+                if hasattr(agent, 'publish') and agent.publish and agent.is_linked_to_published_record:
                     self.save_data_file(agent_id, agent.json(), config.destinations[destination_sfx])
                 else:
                     self.remove_data_file(agent_id, config.destinations[destination_sfx])
@@ -86,9 +89,19 @@ class DataExtractor_ArchivesSpace(DataExtractor):
     def get_updated_subjects(self, last_export):
         """Fetch and save updated subject data."""
         self.log_fetch_start("subjects", last_export)
-        for subject in self.aspace.subjects(with_params={'all_ids': True, 'modified_since': last_export}):
+        query = self.search_query('subject', last_export, config.archivesSpace['repository'])
+        logging.info('Query: {}'.format(query))
+        for subject in self.repo.search.with_params(q=query):
             subject_id = subject.uri.split("/")[-1]
             if subject.is_linked_to_published_record:
                 self.save_data_file(subject_id, subject.json(), config.destinations['subjects'])
             else:
                 self.remove_data_file(subject_id, config.destinations['subjects'])
+
+    def search_query(self, record_type, last_export, repository_id):
+        # TODO: look into why `used_within_published_repository` is needed here - it shouldn't be
+       return 'primary_type:{} AND user_mtime:[{} TO NOW] AND used_within_published_repository:"/repositories/{}"'.format(
+            record_type,
+            datetime.fromtimestamp(last_export).isoformat(),
+            repository_id
+        )
