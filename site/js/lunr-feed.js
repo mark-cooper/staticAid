@@ -2,6 +2,7 @@
 // (with gratitude to https://github.com/katydecorah/katydecorah.github.io/blob/master/js/lunr-feed.js and http://rayhightower.com/blog/2016/01/04/how-to-make-lunrjs-jekyll-work-together/)
 
 const index = lunr(function () {
+  this.field('identifier')
   this.field('title')
   this.field('url')
   this.field('record_type')
