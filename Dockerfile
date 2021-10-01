@@ -1,9 +1,16 @@
 FROM ubuntu:20.04
 
 RUN apt-get -y update && DEBIAN_FRONTEND="noninteractive" apt-get -y install \
-    make gcc inotify-tools apache2 \
-    python3-pip python3-setuptools \
-    ruby ruby-dev
+    apache2 \
+    gcc \
+    inotify-tools \
+    jq \
+    make \
+    python3-pip \
+    python3-setuptools \
+    ruby \
+    ruby-dev \
+    vim
 
 WORKDIR /code
 COPY requirements.txt Gemfile setup.py ./

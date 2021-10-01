@@ -4,3 +4,6 @@ cd /code/
 
 static-aid-make-pages
 bundle exec jekyll build --incremental -d build/site -s build/staging
+# TODO: just do this for now, minify plugin later
+MINIFIED_SEARCH_DATA=`jq -c . < build/site/search_data.json`
+echo $MINIFIED_SEARCH_DATA > build/site/search_data.json
