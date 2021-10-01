@@ -3,7 +3,7 @@
 dataSource: archivesspace
 
 [ArchivesSpace]
-baseurl: http://sandbox.archivesspace.org/api
+baseurl: http://test.archivesspace.org/staff/api
 repository: 2
 user: admin
 password: admin
